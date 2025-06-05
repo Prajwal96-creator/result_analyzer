@@ -1,106 +1,92 @@
 import React, { useState } from "react";
-import { Card, CardActionArea, CardContent, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+import "./Landing.css";
 
 const HomePage = () => {
   const [hovered, setHovered] = useState(null);
 
-  const styles = {
-    container: {
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      gap: "40px",
-    },
-    card: {
-      width: "300px",
-      height: "200px",
-      textAlign: "center",
-      transition: "transform 0.3s ease-in-out",
-      backgroundColor: "#e0f7fa",
-      color: "#00796b",
-    },
-    cardHovered: {
-      transform: "scale(1.1)",
-      backgroundColor: "#80deea",
-    },
-    cardTeacher: {
-      backgroundColor: "#ffecb3",
-      color: "#f57c00",
-    },
-    cardTeacherHovered: {
-      backgroundColor: "#ffd54f",
-    },
-    cardStudent: {
-      backgroundColor: "#c5e1a5",
-      color: "#33691e",
-    },
-    cardStudentHovered: {
-      backgroundColor: "#aed581",
-    },
-    link: {
-      textDecoration: "none",
-    },
+  const notify = (role) => {
+    toast.info(`Navigating to ${role} portal`, { position: "top-center" });
+  };
+
+  const scrollToInfo = () => {
+    const infoSection = document.getElementById("info-section");
+    if (infoSection) {
+      infoSection.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   return (
-    <div style={styles.container}>
-      <Link
-        to="/auth"
-        style={styles.link}
-        onMouseEnter={() => setHovered("teacher")}
-        onMouseLeave={() => setHovered(null)}
-      >
-        <Card
-          style={
-            hovered === "teacher"
-              ? {
-                  ...styles.card,
-                  ...styles.cardTeacher,
-                  ...styles.cardHovered,
-                  ...styles.cardTeacherHovered,
-                }
-              : { ...styles.card, ...styles.cardTeacher }
+    <>
+      <div className="container-wrapper">
+        <h1 className="heading">Welcome to Result Analyzer</h1>
+        <div className="row g-4 text-center w-75">
+          <div className="col-md-6">
+            <Link
+              to="/auth"
+              className="text-decoration-none"
+              onMouseEnter={() => setHovered("teacher")}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => notify("Teacher")}
+            >
+              <div
+                className={`card-style ${
+                  hovered === "teacher" ? "teacher-hover" : "teacher"
+                }`}
+              >
+                <h2 className="fw-bold">Teacher</h2>
+              </div>
+            </Link>
+          </div>
+          <div className="col-md-6">
+            <Link
+              to="/view-result-student"
+              className="text-decoration-none"
+              onMouseEnter={() => setHovered("student")}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => notify("Student")}
+            >
+              <div
+                className={`card-style ${
+                  hovered === "student" ? "student-hover" : "student"
+                }`}
+              >
+                <h2 className="fw-bold">Student</h2>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        <div
+          className="scroll-down"
+          onClick={() =>
+            window.scrollTo({
+              top: document.body.scrollHeight,
+              behavior: "smooth",
+            })
           }
         >
-          <CardActionArea>
-            <CardContent>
-              <Typography variant="h4" component="h2">
-                Teacher
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Link>
-      <Link
-        to="/view-result-student"
-        style={styles.link}
-        onMouseEnter={() => setHovered("student")}
-        onMouseLeave={() => setHovered(null)}
-      >
-        <Card
-          style={
-            hovered === "student"
-              ? {
-                  ...styles.card,
-                  ...styles.cardStudent,
-                  ...styles.cardHovered,
-                  ...styles.cardStudentHovered,
-                }
-              : { ...styles.card, ...styles.cardStudent }
-          }
-        >
-          <CardActionArea>
-            <CardContent>
-              <Typography variant="h4" component="h2">
-                Student
-              </Typography>
-            </CardContent>
-          </CardActionArea>
-        </Card>
-      </Link>
-    </div>
+          ↓ Learn more
+        </div>
+
+        <ToastContainer autoClose={2000} />
+      </div>
+
+      <div id="info-section" className="info-section">
+        <h2>What is Result Analyzer?</h2>
+        <p>
+          Result Analyzer is a web-based platform designed to simplify the
+          process of managing and analyzing student results. Teachers can log
+          in to upload, modify, and view student performance, while students can
+          instantly access their grades and track their academic progress. The
+          platform promotes transparency, efficiency, and performance tracking
+          for both educators and learners.
+        </p>
+      </div>
+    </>
   );
 };
 
